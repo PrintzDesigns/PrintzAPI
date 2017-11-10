@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post '/sign-in' => 'users#signin'
   delete '/sign-out/:id' => 'users#signout'
   patch '/change-password/:id' => 'users#changepw'
+  get '/users' => 'users#index'
   resources :users, only: [:index, :show]
 
   resources :user_types

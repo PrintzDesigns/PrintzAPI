@@ -15,10 +15,10 @@ class UsersController < ProtectedController
 
   # POST '/sign-in'
   def signin
-    creds = user_creds
-    if (user = User.authenticate creds[:email],
+    creds = user_signin_creds
+    if (@user = User.authenticate creds[:email],
                                  creds[:password])
-      render json: user, serializer: UserLoginSerializer, root: 'user'
+   render json: @user, serializer: UserLoginSerializer, root: 'user'
     else
       head :unauthorized
     end
@@ -61,7 +61,13 @@ class UsersController < ProtectedController
   private
 
   def user_creds
-    params.permit(:first_name, :last_name, :email, :password)
+    params.require(:user)
+          .permit(:first_name, :last_name, :email, :password)
+  end
+
+  def user_signin_creds
+    params.require(:user)
+          .permit(:email, :password)
   end
 
   def pw_creds
